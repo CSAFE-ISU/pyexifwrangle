@@ -4,14 +4,15 @@ import pyexifwrangle.wrangle as wrangle
 
 path = 'tests/fixtures/exif.csv'
 file_col_name = 'SourceFile'
-df = pd.read_csv(path)
+df = wrangle.read_exif(path, file_col_name=file_col_name)
 
-folders = wrangle.get_folders(df=df, file_col_name=file_col_name)
+# Are any images missing EXIF data?
+missing = wrangle.check_missing_exif(df=df)
 
-scene_types = wrangle.get_scene_type(df=df, file_col_name=file_col_name)
-
-models = wrangle.get_models(df=df, file_col_name=file_col_name)
-
+# Do all cameras have 100 images?
 total = wrangle.count_images_by_camera(df=df, file_col_name=file_col_name)
 
-check = wrangle.check_column(df=df, file_col_name=file_col_name, col_name='Aperture', by_camera='All')
+front = wrangle.check_column(df=df, file_col_name=file_col_name, col_name='Aperture', by_camera='Front')
+telephoto = wrangle.check_column(df=df, file_col_name=file_col_name, col_name='Aperture', by_camera='Telephoto')
+wide = wrangle.check_column(df=df, file_col_name=file_col_name, col_name='Aperture', by_camera='Wide')
+ultra = wrangle.check_column(df=df, file_col_name=file_col_name, col_name='Aperture', by_camera='Ultra')

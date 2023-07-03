@@ -29,6 +29,10 @@ def check_column(df, file_col_name, col_name, by_camera='All'):
     return df
 
 
+def check_missing_exif(df):
+    return df.query('Aperture.isnull()', engine='python')
+
+
 def count_images_by_camera(df, file_col_name):
     """
     Count the number of images grouped by phone, camera, and scene type.
@@ -91,3 +95,15 @@ def get_scene_type(df, file_col_name):
     <scene type>'"""
     folders = get_folders(df=df, file_col_name=file_col_name)
     return [s.split('-')[-1].strip() for s in folders]
+
+
+def read_exif(path, file_col_name):
+    df = pd.read_csv(path)
+
+    files = get_column(df=df, col_name=file_col_name)
+    images = pd.Series([s.split('/')[-1].strip() for s in files])
+
+    # drop file names that start with '.'
+    df = df[~images.str.startswith('.')]
+
+    return df
