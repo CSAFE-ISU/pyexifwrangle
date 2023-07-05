@@ -114,6 +114,28 @@ def get_scene_type(df, file_col_name):
     return [s.split('-')[-1].strip() for s in folders]
 
 
+def find_images(df, file_col_name, col_name, col_val, phone=None, camera=None, scene_type=None):
+    # create data frame
+    phones = get_phones(df, file_col_name)
+    cameras = get_cameras(df, file_col_name)
+    scene_types = get_scene_type(df, file_col_name)
+    images = get_images(df, file_col_name)
+    col = get_column(df, col_name)
+    df = pd.DataFrame({'phones': phones, 'cameras': cameras, 'scene_types': scene_types, 'col': col, 'images': images})
+
+    # optional filters
+    if phone is not None:
+        df = df.query('phones in @phone')
+    if camera is not None:
+        df = df.query('cameras in @camera')
+    if scene_type is not None:
+        df = df.query('scene_types == @scene_type')
+
+    # filter
+    df = df.query('col == @col_val').reset_index()
+    return df
+
+
 def read_exif(path, file_col_name):
     df = pd.read_csv(path)
 

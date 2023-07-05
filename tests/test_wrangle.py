@@ -40,6 +40,17 @@ def test_count_images_by_camera(df, file_col_name):
     pd.testing.assert_frame_equal(actual, expected)
 
 
+def test_find_images_using_defaults(df, file_col_name):
+    actual = wrangle.find_images(df=df, file_col_name=file_col_name, col_name='Aperture', col_val=2.4)
+    assert actual.shape[0] == 2117
+
+
+def test_find_images_by_phone_camera_scene(df, file_col_name):
+    actual = wrangle.find_images(df=df, file_col_name=file_col_name, col_name='Aperture', col_val=2.2, phone='GN10_7',
+                                 camera='Front', scene_type='Blank')
+    assert actual.images[0] == '20230615_095320_100.jpg'
+
+
 def test_get_cameras(df, file_col_name):
     assert sorted(set(wrangle.get_cameras(df=df, file_col_name=file_col_name))) == \
            ['Front', 'Telephoto', 'Ultra', 'Wide']
