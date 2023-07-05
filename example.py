@@ -6,7 +6,7 @@ file_col_name = 'SourceFile'
 df = wrangle.read_exif(path, file_col_name=file_col_name)
 
 # Are any images missing EXIF data?
-missing = wrangle.check_missing_exif(df=df)
+missing = wrangle.check_missing_exif(df=df, file_col_name=file_col_name)
 
 # Do all cameras have 100 images?
 total = wrangle.count_images_by_camera(df=df, file_col_name=file_col_name)

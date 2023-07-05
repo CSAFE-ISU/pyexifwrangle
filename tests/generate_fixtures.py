@@ -4,7 +4,7 @@ import pyexifwrangle.wrangle as wrangle
 
 path = 'tests/fixtures/exif.csv'
 file_col_name = 'SourceFile'
-df = pd.read_csv(path)
+df = wrangle.read_exif(path=path, file_col_name=file_col_name)
 
 total = wrangle.count_images_by_camera(df=df, file_col_name=file_col_name)
 total.to_csv("tests/fixtures/totals.csv", index=False)

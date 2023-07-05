@@ -12,13 +12,13 @@ from pyexifwrangle import wrangle
 
 
 @pytest.fixture(scope='session')
-def df():
-    return pd.read_csv('tests/fixtures/exif.csv')
+def file_col_name():
+    return 'SourceFile'
 
 
 @pytest.fixture(scope='session')
-def file_col_name():
-    return 'SourceFile'
+def df(file_col_name):
+    return wrangle.read_exif(path='tests/fixtures/exif.csv', file_col_name=file_col_name)
 
 
 def test_check_column(df, file_col_name):

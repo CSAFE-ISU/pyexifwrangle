@@ -29,8 +29,18 @@ def check_column(df, file_col_name, col_name, by_camera='All'):
     return df
 
 
-def check_missing_exif(df):
-    return df.query('Aperture.isnull()', engine='python')
+def check_missing_exif(df, file_col_name):
+    # filter for images with no aperture
+    df = df.query('Aperture.isnull()', engine='python')
+
+    # create data frame
+    phones = get_phones(df=df, file_col_name=file_col_name)
+    cameras = get_cameras(df=df, file_col_name=file_col_name)
+    scene_types = get_scene_type(df=df, file_col_name=file_col_name)
+    images = get_images(df=df, file_col_name=file_col_name)
+    df = pd.DataFrame({'phones': phones, 'cameras': cameras, 'scene_types': scene_types, 'images': images})
+
+    return df
 
 
 def count_images_by_camera(df, file_col_name):
@@ -71,6 +81,12 @@ def get_folders(df, file_col_name):
     """Extract folder names as a list from the files names in the exif data frame"""
     files = get_column(df=df, col_name=file_col_name)
     return [s.split('/')[-2] for s in files]
+
+
+def get_images(df, file_col_name):
+    """Extract image names as a list from the files names in the exif data frame"""
+    files = get_column(df=df, col_name=file_col_name)
+    return [s.split('/')[-1] for s in files]
 
 
 def get_models(df, file_col_name):
