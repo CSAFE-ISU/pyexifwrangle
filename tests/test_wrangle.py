@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import pytest
 
@@ -5,10 +6,10 @@ import pytest
 from pyexifwrangle import wrangle
 
 
-# @pytest.fixture(scope="session")
-# def temp_main_dir(tmp_path_factory):
-#     """Make a temporary directory"""
-#     return tmp_path_factory.mktemp("main_dir")
+@pytest.fixture(scope="session")
+def temp_output_dir(tmp_path_factory):
+    """Make a temporary directory"""
+    return tmp_path_factory.mktemp("output")
 
 
 @pytest.fixture(scope='session')
@@ -56,3 +57,14 @@ def test_get_phones(df, file_col_name):
 def test_get_scene_type(df, file_col_name):
     expected = sorted(set(wrangle.get_scene_type(df=df, file_col_name=file_col_name)))
     assert expected == ['Blank', 'Scene']
+
+
+def test_run_checks_for_model(df, file_col_name, temp_output_dir):
+    wrangle.run_checks_for_model(df=df, file_col_name=file_col_name, model_name='Note10',
+                                 all_fields=['DigitalZoomRatio', 'ExposureMode'],
+                                 camera_fields=['Aperture', 'ImageSize'], output_dir=temp_output_dir)
+    actual = sorted(os.listdir(temp_output_dir))
+    assert actual == ['Note10_Aperture_Front.csv', 'Note10_Aperture_Telephoto.csv', 'Note10_Aperture_Ultra.csv',
+                      'Note10_Aperture_Wide.csv', 'Note10_DigitalZoomRatio.csv', 'Note10_ExposureMode.csv',
+                      'Note10_ImageSize_Front.csv', 'Note10_ImageSize_Telephoto.csv', 'Note10_ImageSize_Ultra.csv',
+                      'Note10_ImageSize_Wide.csv', 'Note10_image_counts.csv', 'Note10_missing_EXIF.csv']
