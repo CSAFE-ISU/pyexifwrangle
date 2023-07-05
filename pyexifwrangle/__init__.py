@@ -1,1 +1,3 @@
-__version__ = '1.0.0'
+__version__ = '0.1.0'
+__author__ = 'Stephanie Reinders'
+__credits__ = 'Center for Statistics and Applications in Forensic Evidence'
