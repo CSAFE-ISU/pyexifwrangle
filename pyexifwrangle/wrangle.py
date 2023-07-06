@@ -161,13 +161,14 @@ def read_exif(path, file_col_name):
     return df
 
 
-def run_checks_for_model(df, file_col_name, model_name, all_fields, camera_fields, output_dir):
+def run_checks_for_model(df, file_col_name, model_name, all_fields, camera_fields, cameras, output_dir):
     """
     :param df: Pandas data frame of EXIF data for a single model of phone
     :param file_col_name: Name of column that contains the image file names
     :param model_name: Name of phone model
-    :param all_fields: Name(s) of columns to check with images from all camera types grouped together
-    :param camera_fields: Name(s) of columns to check with images grouped by camera type
+    :param all_fields: List of name(s) of columns to check with images from all camera types grouped together
+    :param camera_fields: List of name(s) of columns to check with images grouped by camera type
+    :param cameras: List of cameras
     :param output_dir: File path to directory that will store output csv files
     """
 
@@ -185,8 +186,7 @@ def run_checks_for_model(df, file_col_name, model_name, all_fields, camera_field
         temp_df.to_csv(os.path.join(output_dir, model_name + '_' + f + '.csv'), index=False)
 
     # Check aperture and image size by camera
-    cameras = ['Front', 'Telephoto', 'Ultra', 'Wide']
     for f in camera_fields:
         for c in cameras:
-            temp_df = check_columns(df=df, file_col_name=file_col_name, col_names=[f], by_camera=[c])
+            temp_df = check_columns(df=df, file_col_name=file_col_name, col_names=[f], by_camera=c)
             temp_df.to_csv(os.path.join(output_dir, model_name + '_' + f + '_' + c + '.csv'), index=False)

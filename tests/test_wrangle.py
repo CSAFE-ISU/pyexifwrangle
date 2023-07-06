@@ -74,7 +74,8 @@ def test_get_scene_type(df, file_col_name):
 def test_run_checks_for_model(df, file_col_name, temp_output_dir):
     wrangle.run_checks_for_model(df=df, file_col_name=file_col_name, model_name='Note10',
                                  all_fields=['DigitalZoomRatio', 'ExposureMode'],
-                                 camera_fields=['Aperture', 'ImageSize'], output_dir=temp_output_dir)
+                                 camera_fields=['Aperture', 'ImageSize'],
+                                 cameras=['Front', 'Telephoto', 'Ultra', 'Wide'], output_dir=temp_output_dir)
     actual = sorted(os.listdir(temp_output_dir))
     assert actual == ['Note10_Aperture_Front.csv', 'Note10_Aperture_Telephoto.csv', 'Note10_Aperture_Ultra.csv',
                       'Note10_Aperture_Wide.csv', 'Note10_DigitalZoomRatio.csv', 'Note10_ExposureMode.csv',
