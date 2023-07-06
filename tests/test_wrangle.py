@@ -23,13 +23,13 @@ def df(file_col_name):
 
 
 def test_check_column(df, file_col_name):
-    actual = wrangle.check_column(df=df, file_col_name=file_col_name, col_name='Aperture')
+    actual = wrangle.check_columns(df=df, file_col_name=file_col_name, col_names=['Aperture'])
     expected = pd.read_csv('tests/fixtures/apertures.csv', dtype={'count': 'int64'})
     pd.testing.assert_frame_equal(actual, expected)
 
 
 def test_check_column_front(df, file_col_name):
-    actual = wrangle.check_column(df=df, file_col_name=file_col_name, col_name='Aperture', by_camera='Front')
+    actual = wrangle.check_columns(df=df, file_col_name=file_col_name, col_names=['Aperture'], by_camera=['Front'])
     expected = pd.read_csv('tests/fixtures/front_apertures.csv', dtype={'count': 'int64'})
     pd.testing.assert_frame_equal(actual, expected)
 
@@ -41,12 +41,13 @@ def test_count_images_by_camera(df, file_col_name):
 
 
 def test_find_images_using_defaults(df, file_col_name):
-    actual = wrangle.find_images(df=df, file_col_name=file_col_name, col_name='Aperture', col_val=2.4)
+    actual = wrangle.find_images(df=df, file_col_name=file_col_name, col_name='Aperture', col_values=[2.4])
     assert actual.shape[0] == 2117
 
 
 def test_find_images_by_phone_camera_scene(df, file_col_name):
-    actual = wrangle.find_images(df=df, file_col_name=file_col_name, col_name='Aperture', col_val=2.2, phone='GN10_7',
+    actual = wrangle.find_images(df=df, file_col_name=file_col_name, col_name='Aperture', col_values=[2.2],
+                                 phone='GN10_7',
                                  camera='Front', scene_type='Blank')
     assert actual.images[0] == '20230615_095320_100.jpg'
 
