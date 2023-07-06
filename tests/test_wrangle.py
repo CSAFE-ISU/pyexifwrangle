@@ -71,7 +71,15 @@ def test_get_scene_type(df, file_col_name):
     assert expected == ['Blank', 'Scene']
 
 
-def test_run_checks_for_model(df, file_col_name, temp_output_dir):
+def test_run_checks_for_model_wo_camera_fields(df, file_col_name, temp_output_dir):
+    wrangle.run_checks_for_model(df=df, file_col_name=file_col_name, model_name='Note10',
+                                 all_fields=['DigitalZoomRatio', 'ExposureMode'], output_dir=temp_output_dir)
+    actual = sorted(os.listdir(temp_output_dir))
+    assert actual == ['Note10_DigitalZoomRatio.csv', 'Note10_ExposureMode.csv', 'Note10_image_counts.csv',
+                      'Note10_missing_EXIF.csv']
+
+
+def test_run_checks_for_model_w_camera_fields(df, file_col_name, temp_output_dir):
     wrangle.run_checks_for_model(df=df, file_col_name=file_col_name, model_name='Note10',
                                  all_fields=['DigitalZoomRatio', 'ExposureMode'],
                                  camera_fields=['Aperture', 'ImageSize'],
