@@ -149,8 +149,8 @@ def find_images(df, file_col_name, col_name, col_values, phone=None, camera=None
     return df
 
 
-def read_exif(path, file_col_name):
-    df = pd.read_csv(path)
+def read_exif(path, file_col_name, encoding='utf-8'):
+    df = pd.read_csv(path, encoding=encoding)
 
     files = get_column(df=df, col_name=file_col_name)
     images = pd.Series([s.split('/')[-1].strip() for s in files])
