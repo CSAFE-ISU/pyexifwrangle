@@ -1,0 +1,17 @@
+model,phone,scene_type,camera,Aperture,count
+s21,s21_1,blank,front,2.2,10
+s21,s21_1,natural,front,2.2,10
+s21,s21_2,blank,front,2.2,10
+s21,s21_2,natural,front,2.2,10
+s21,s21_1,blank,telephoto,2.0,10
+s21,s21_1,natural,telephoto,2.0,10
+s21,s21_2,blank,telephoto,2.0,10
+s21,s21_2,natural,telephoto,2.0,10
+s21,s21_1,blank,ultra,2.2,9
+s21,s21_1,natural,ultra,2.2,10
+s21,s21_2,blank,ultra,2.2,10
+s21,s21_2,natural,ultra,2.2,10
+s21,s21_1,blank,wide,1.8,10
+s21,s21_1,natural,wide,1.8,10
+s21,s21_2,blank,wide,1.8,10
+s21,s21_2,natural,wide,1.8,10

@@ -1,16 +1,17 @@
 import pyexifwrangle.wrangle as wrangle
 
 
-path = 'tests/fixtures/exif.csv'
-file_col_name = 'SourceFile'
-df = wrangle.read_exif(path, file_col_name=file_col_name)
+path = 'tests/fixtures/exif_s21.csv'
+filename_col = 'SourceFile'
 
-all_fields = ['DigitalZoomRatio', 'ExposureMode']
-camera_fields = ['Aperture', 'ImageSize']
-wrangle.run_checks_for_model(df=df, file_col_name=file_col_name, model_name='Note10',
-                             all_fields=all_fields, camera_fields=camera_fields, output_dir='data')
+df = wrangle.read_exif(path, filename_col=filename_col)
+df = wrangle.filename2columns(df=df, filename_col=filename_col,
+                              columns=['model', 'phone', 'scene_type', 'camera', 'image'])
 
-filtered = wrangle.find_images(df=df, file_col_name=file_col_name, col_name='Aperture', col_values=[2.2],
-                               phone='GN10_7', camera='Front', scene_type='Blank')
+missing = wrangle.check_missing_exif(df=df, column='Aperture').reset_index(drop=True)
 
-wrangle.check_columns(df=df, file_col_name=file_col_name, col_names=['Aperture', 'ImageSize'], by_camera='Front')
+counts = wrangle.count_images_by_columns(df=df, columns=['model', 'phone', 'scene_type', 'camera'])
+
+checks = wrangle.count_images_by_columns(df=df,
+                                         columns=['model', 'phone', 'scene_type', 'camera', 'Aperture', 'ImageSize'],
+                                         sort=['model', 'camera', 'phone', 'scene_type'])
