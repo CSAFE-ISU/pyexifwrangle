@@ -1,0 +1,17 @@
+model,phone,scene_type,camera,count
+s21,s21_1,blank,front,10
+s21,s21_1,blank,telephoto,10
+s21,s21_1,blank,ultra,10
+s21,s21_1,blank,wide,10
+s21,s21_1,natural,front,10
+s21,s21_1,natural,telephoto,10
+s21,s21_1,natural,ultra,10
+s21,s21_1,natural,wide,10
+s21,s21_2,blank,front,10
+s21,s21_2,blank,telephoto,10
+s21,s21_2,blank,ultra,10
+s21,s21_2,blank,wide,10
+s21,s21_2,natural,front,10
+s21,s21_2,natural,telephoto,10
+s21,s21_2,natural,ultra,10
+s21,s21_2,natural,wide,10
