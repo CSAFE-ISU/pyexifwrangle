@@ -24,6 +24,7 @@ def count_images_by_columns(df, columns, sort=None):
     Args:
         df (DataFrame): Data frame of EXIF data
         columns (list): List of columns to group by
+        sort (list): Optional list of columns for sorting returned data frame
 
     Returns:
         DataFrame
@@ -41,7 +42,16 @@ def count_images_by_columns(df, columns, sort=None):
 
 
 def get_column(df, column):
-    """Extract column from data frame as list"""
+    """
+    Extract column from data frame as list
+
+    Args:
+        df (DataFrame): Data frame of EXIF data
+        column (str): Name of column to extract
+
+    Returns:
+        List
+    """
     return df[column].to_list()
 
 
@@ -73,8 +83,41 @@ def filename2columns(df, filename_col, columns):
     return df
 
 
+def find_images(df, filter_dict, return_columns=None):
+    """
+    Use Pandas to filter the EXIF data frame for column(s) and column value(s) specified in filter_dict.
+
+    Args:
+        df (DataFrame): Data frame of EXIF data
+        filter_dict (dict): Dictionary of column and column value pair(s). Example filter_dict={'phone':
+        's21_1', 'Aperture': 2.2}
+        return_columns (list): Optional list of columns to return if you don't want the entire data frame
+
+    Returns:
+        DataFrame
+    """
+    for k, v in filter_dict.items():
+        df = df.query("`{0}` == @v".format(k)).reset_index(drop=True)
+
+    if return_columns is not None:
+        df = df[return_columns]
+
+    return df
+
+
 def read_exif(path, filename_col, encoding='utf-8'):
-    # read csv
+    """
+    Load EXIF data from a csv file as a Pandas data frame and drop any images whose name starts with '.'
+
+    Args:
+        path (str): Absolute or relative file path and file name of the csv file containing EXIF data extracted using
+        Phil Harvey's EXIFTool
+        filename_col (str): The name of the column in the EXIF data that contains the images' filenames
+        encoding (str): The encoding for Pandas to use when loading the csv file of EXIF data
+
+    Returns:
+        DataFrame
+    """
     df = pd.read_csv(path, encoding=encoding)
 
     # drop file names that start with '.'

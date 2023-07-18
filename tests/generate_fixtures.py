@@ -28,3 +28,10 @@ counts.to_csv('tests/fixtures/counts.csv', index=False)
 aperture = wrangle.count_images_by_columns(df=df, columns=['model', 'phone', 'scene_type', 'camera', 'Aperture'],
                                            sort=['model', 'camera', 'phone', 'scene_type'])
 aperture.to_csv('tests/fixtures/aperture_sorted.csv', index=False)
+
+filtered_all = wrangle.find_images(df=df, filter_dict={'phone': 's21_1', 'Aperture': 2.2})
+filtered_all.to_csv('tests/fixtures/found_images_all_columns.csv', index=False)
+
+filtered = wrangle.find_images(df=df, filter_dict={'phone': 's21_1', 'Aperture': 2.2},
+                               return_columns=['model', 'phone', 'scene_type', 'camera', 'image'])
+filtered.to_csv('tests/fixtures/found_images.csv', index=False)
