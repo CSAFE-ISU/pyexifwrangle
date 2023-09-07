@@ -1,6 +1,9 @@
 import pyexifwrangle.wrangle as wrangle
 
 
+test_df = wrangle.get_exif(input_dir='tests/fixtures/images', output_csv='tests/fixtures/get_exif.csv')
+
+
 path = 'tests/fixtures/exif_s21.csv'
 filename_col = 'SourceFile'
 

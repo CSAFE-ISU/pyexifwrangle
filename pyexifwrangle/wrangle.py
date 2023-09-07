@@ -41,21 +41,7 @@ def count_images_by_columns(df, columns, sort=None):
     return df
 
 
-def get_column(df, column):
-    """
-    Extract column from data frame as list
-
-    Args:
-        df (DataFrame): Data frame of EXIF data
-        column (str): Name of column to extract
-
-    Returns:
-        List
-    """
-    return df[column].to_list()
-
-
-def filename2columns(df, filename_col, columns):
+def filename2columns(df, columns, filename_col='SourceFile',):
     """
     Split the filename column into individual columns.
 
@@ -105,7 +91,41 @@ def find_images(df, filter_dict, return_columns=None):
     return df
 
 
-def read_exif(path, filename_col, encoding='utf-8'):
+def get_column(df, column):
+    """
+    Extract column from data frame as list
+
+    Args:
+        df (DataFrame): Data frame of EXIF data
+        column (str): Name of column to extract
+
+    Returns:
+        List
+    """
+    return df[column].to_list()
+
+
+def get_exif(input_dir, output_csv, filename_col='SourceFile'):
+    """
+    Run Phil Harvey's EXIFTool to extract EXIF data from images in the input directory
+    and save the EXIF data in a csv file.
+
+    Args:
+        input_dir (str): Path to input directory containing images
+        output_csv (str): Path for output csv file
+        filename_col (str): The name of the column in the EXIF data that contains the images' filenames
+
+    Returns:
+        DataFrame
+    """
+    # run exiftool
+    os.system('exiftool -csv -r ' + input_dir + ' > ' + output_csv)
+    # load csv as data frame
+    df = read_exif(path=output_csv, filename_col=filename_col)
+    return df
+
+
+def read_exif(path, filename_col='SourceFile', encoding='utf-8'):
     """
     Load EXIF data from a csv file as a Pandas data frame and drop any images whose name starts with '.'
 

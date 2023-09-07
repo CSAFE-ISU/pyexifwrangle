@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import pytest
 
@@ -13,6 +14,12 @@ def filename_col():
 @pytest.fixture(scope='session')
 def df(filename_col):
     return wrangle.read_exif(path='tests/fixtures/exif_s21.csv', filename_col=filename_col)
+
+
+@pytest.fixture(scope="session")
+def temp_dir(tmp_path_factory):
+    """Make a temporary directory"""
+    return tmp_path_factory.mktemp("temp_dir")
 
 
 def test_filename2columns(df, filename_col):
@@ -68,4 +75,15 @@ def test_find_images_selected_columns(df):
     actual = wrangle.find_images(df=df, filter_dict={'phone': 's21_1', 'Aperture': 2.2},
                                  return_columns=['model', 'phone', 'scene_type', 'camera', 'image'])
     expected = pd.read_csv('tests/fixtures/found_images.csv')
+    pd.testing.assert_frame_equal(actual, expected)
+
+
+def test_get_exif(temp_dir):
+    actual = wrangle.get_exif(input_dir='tests/fixtures/images', output_csv=os.path.join(temp_dir, 'output.csv'))
+    # # change dtype from object to float64 so test passes
+    # actual['GPSLatitude'] = actual['GPSLatitude'].astype('float64')
+    # actual['GPSLongitude'] = actual['GPSLongitude'].astype('float64')
+    # actual['GPSPosition'] = actual['GPSPosition'].astype('float64')
+    # actual['GPSProcessingMethod'] = actual['GPSProcessingMethod'].astype('float64')
+    expected = pd.read_csv('tests/fixtures/get_exif.csv')
     pd.testing.assert_frame_equal(actual, expected)

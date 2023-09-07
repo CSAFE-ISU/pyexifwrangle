@@ -1,12 +1,14 @@
 import pyexifwrangle.wrangle as wrangle
 
 
-path = 'tests/fixtures/exif_s21.csv'
-filename_col = 'SourceFile'
+# create fixture with get_exif(). Only uses three images to keep package size small.
+df = wrangle.get_exif(input_dir='tests/fixtures/images', output_csv='tests/fixtures/get_exif.csv')
+df.to_csv('tests/fixtures/get_exif.csv', index=False)
 
 # make csv smaller - sample 10 images per camera and select s21_1 and s21_2 only
-df = wrangle.read_exif(path, filename_col=filename_col)
-df = wrangle.filename2columns(df=df, filename_col=filename_col,
+path = 'tests/fixtures/exif_s21.csv'
+df = wrangle.read_exif(path)
+df = wrangle.filename2columns(df=df,
                               columns=['model', 'phone', 'scene_type', 'camera', 'image'])
 df = df.groupby(['model', 'phone', 'scene_type', 'camera']).sample(n=10).reset_index(drop=True)
 keep = ['s21_1', 's21_2']
@@ -14,8 +16,8 @@ df = df.query('phone in @keep').reset_index(drop=True)
 df.to_csv('tests/fixtures/exif_s21.csv', index=False)
 
 # load smaller csv
-df = wrangle.read_exif(path, filename_col=filename_col)
-df = wrangle.filename2columns(df=df, filename_col=filename_col,
+df = wrangle.read_exif(path)
+df = wrangle.filename2columns(df=df,
                               columns=['model', 'phone', 'scene_type', 'camera', 'image'])
 df.to_csv('tests/fixtures/exif_s21_columns.csv', index=False)
 

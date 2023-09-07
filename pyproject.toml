@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyexifwrangle"
-version = "2023.9"
+version = "0.1.4"
 authors = [
   { name="Stephanie Reinders", email="reinders.stephanie@gmail.com" },
 ]
@@ -16,6 +16,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["pyexifwrangle*"]
+exclude = ["cov_html*"]
 
 [project.urls]
 "Homepage" = "https://github.com/CSAFE-ISU/pyexifwrangle"
