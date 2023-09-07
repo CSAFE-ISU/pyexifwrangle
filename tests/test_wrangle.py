@@ -80,10 +80,8 @@ def test_find_images_selected_columns(df):
 
 def test_get_exif(temp_dir):
     actual = wrangle.get_exif(input_dir='tests/fixtures/images', output_csv=os.path.join(temp_dir, 'output.csv'))
-    # # change dtype from object to float64 so test passes
-    # actual['GPSLatitude'] = actual['GPSLatitude'].astype('float64')
-    # actual['GPSLongitude'] = actual['GPSLongitude'].astype('float64')
-    # actual['GPSPosition'] = actual['GPSPosition'].astype('float64')
-    # actual['GPSProcessingMethod'] = actual['GPSProcessingMethod'].astype('float64')
+    # FileAccessDate will change each time get_exif() runs
+    actual.drop(columns=['FileAccessDate'], inplace=True)
     expected = pd.read_csv('tests/fixtures/get_exif.csv')
+    expected.drop(columns=['FileAccessDate'], inplace=True)
     pd.testing.assert_frame_equal(actual, expected)

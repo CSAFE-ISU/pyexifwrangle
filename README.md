@@ -13,32 +13,30 @@ $ pip install pyexifwrangle
 Install Phil Harvey's EXIFTool from https://exiftool.org/. This site has installation instructions if you need them.
 
 ## Usage
-### Get EXIF data using EXIFTool
-After installing EXIFTool, you can use the terminal to extract EXIF data from every image in a folder and save the 
-results in a csv file. Open the terminal and change directories to the folder containing EXIFTool. On my computer, 
-this step looks like
+### Get EXIF data
+After installing EXIFTool, you can extract EXIF data from every image in a folder, including subdirectories, save the 
+results in a csv file, and return the results in a Pandas DataFrame.
 
-```bash
-$ cd ~/Documents/Image-ExifTool-12.49
+```python
+import pyexifwrangle.wrangle as wr
+
+df = wr.get_exif(input_dir='path/to/images', output_csv='path/to/output.csv')
 ```
-Extract the EXIF data and save it in a csv file.
-```bash
-$ exiftool -csv -r absolute_path/to/image_directory > path/to/output.csv
-```
-The image_directory can include subdirectories and the flag `-r` tells EXIFTool to include images in these 
-subdirectories in the output.
 
 ### Wrangle the EXIF data in Python
+If you already used get_exif() to save the EXIF to a csv file, you can use read_exif() to
+load the csv file into a Pandas data frame. In this case, the output of get_exif() is the same as the output
+from read_exif().
 
-Load the csv file into Python.
 ```python
 import pyexifwrangle.wrangle as wr
 
 df = wr.read_exif('path/to/output.csv', filename_col='SourceFile')
 ```
 The function *wrangle.read_exif* uses the Pandas package to load the csv into a data frame. The parameter 
-*filename_col* is the name of the column that contains the filenames of the images.  The absolute file paths are included with the filenames in the *filename_col*. After 
-reading the EXIF data into a Pandas data frame, this function removes any images whose filename starts with '.'. 
+*filename_col* is the name of the column that contains the filenames of the images.  The absolute file paths are 
+included with the filenames in the *filename_col*. After reading the EXIF data into a Pandas data frame, this function 
+removes any images whose filename starts with '.'. 
 
 I often organize my images into folders and sub-folders. For example one of my projects has the following folder tree:
 ```
