@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyexifwrangle"
-version = "0.1.6"
+version = "0.2.0"
 authors = [
   { name="Stephanie Reinders", email="reinders.stephanie@gmail.com" },
 ]
@@ -22,7 +22,7 @@ include-package-data = false
 
 [tool.setuptools.packages.find]
 include = ["pyexifwrangle*"]
-exclude = ["cov_html*"]
+exclude = ["cov_html*", "dev_how_to.md"]
 
 [project.urls]
 "Homepage" = "https://github.com/CSAFE-ISU/pyexifwrangle"
