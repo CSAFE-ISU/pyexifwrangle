@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import pytest
-
+import shutil
 
 from pyexifwrangle import wrangle
 
@@ -20,6 +20,12 @@ def df(filename_col):
 def temp_dir(tmp_path_factory):
     """Make a temporary directory"""
     return tmp_path_factory.mktemp("temp_dir")
+
+
+@pytest.fixture(scope="session")
+def temp_dir2(tmp_path_factory):
+    """Make a temporary directory"""
+    return tmp_path_factory.mktemp("temp_dir2")
 
 
 def test_filename2columns(df, filename_col):
@@ -85,3 +91,18 @@ def test_get_exif(temp_dir):
     expected = pd.read_csv('tests/fixtures/get_exif.csv')
     expected.drop(columns=['FileAccessDate'], inplace=True)
     pd.testing.assert_frame_equal(actual, expected)
+
+def test_wipe_gps(temp_dir2):
+    # copy image with gps data to temp dir
+    shutil.copy2(os.path.join('tests', 'fixtures', 'images', 'gps_example.JPG'), os.path.join(temp_dir2, 'gps_example.JPG'))
+    # check copied image has GPS tags
+    df = wrangle.get_exif(input_dir=str(temp_dir2), output_csv=os.path.join(temp_dir2, 'gps.csv'))
+    gps_tags = [f for f in df.columns if f.startswith('GPS')]
+    assert gps_tags
+
+    # wipe gps
+    wrangle.wipe_gps(os.path.join(temp_dir2, 'gps_example.JPG'))
+    # check copied image has GPS tags
+    df = wrangle.get_exif(input_dir=str(temp_dir2), output_csv=os.path.join(temp_dir2, 'gps.csv'))
+    gps_tags = [f for f in df.columns if f.startswith('GPS')]
+    assert not gps_tags

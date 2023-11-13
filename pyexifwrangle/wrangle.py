@@ -120,6 +120,7 @@ def get_exif(input_dir, output_csv, filename_col='SourceFile'):
     """
     # run exiftool
     os.system('exiftool -csv -r ' + input_dir + ' > ' + output_csv)
+
     # load csv as data frame
     df = read_exif(path=output_csv, filename_col=filename_col)
     return df
@@ -146,3 +147,16 @@ def read_exif(path, filename_col='SourceFile', encoding='utf-8'):
     df = df[~images.str.startswith('.')]
 
     return df
+
+
+def wipe_gps(path):
+    """
+    Delete all GPS related tags from an image's EXIF data. The image itself is not changed; only its EXIF data is changed.
+
+    Args:
+        path (str): Absolute or relative file path and file name of an image
+
+    Returns:
+        None
+    """
+    os.system('exiftool -gps:all= ' + path)
