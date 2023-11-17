@@ -159,4 +159,4 @@ def wipe_gps(path):
     Returns:
         None
     """
-    os.system('exiftool -gps:all= ' + path)
+    os.system('exiftool -gps:all= "' + path + '"')
