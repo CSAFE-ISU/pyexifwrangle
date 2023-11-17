@@ -106,3 +106,18 @@ def test_wipe_gps(temp_dir2):
     df = wrangle.get_exif(input_dir=str(temp_dir2), output_csv=os.path.join(temp_dir2, 'gps.csv'))
     gps_tags = [f for f in df.columns if f.startswith('GPS')]
     assert not gps_tags
+
+def test_wipe_gps_file_w_parentheses(temp_dir2):
+    # copy image with gps data to temp dir
+    shutil.copy2(os.path.join('tests', 'fixtures', 'images', 'gps_example.JPG'), os.path.join(temp_dir2, 'gps_example (0).JPG'))
+    # check copied image has GPS tags
+    df = wrangle.get_exif(input_dir=str(temp_dir2), output_csv=os.path.join(temp_dir2, 'gps.csv'))
+    gps_tags = [f for f in df.columns if f.startswith('GPS')]
+    assert gps_tags
+
+    # wipe gps
+    wrangle.wipe_gps(os.path.join(temp_dir2, 'gps_example (0).JPG'))
+    # check copied image has GPS tags
+    df = wrangle.get_exif(input_dir=str(temp_dir2), output_csv=os.path.join(temp_dir2, 'gps.csv'))
+    gps_tags = [f for f in df.columns if f.startswith('GPS')]
+    assert not gps_tags
